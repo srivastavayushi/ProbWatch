@@ -76,7 +76,10 @@ export function scoreMovies(data, selections, options = {}) {
 export function getRecommendations(data, selections, options = {}) {
   const { limit = RECOMMENDATION_LIMIT, ...scoringOptions } = options;
   return scoreMovies(data, selections, scoringOptions)
-    .sort((a, b) => b.probability - a.probability || b.observations - a.observations)
+    // Put the most repeatable evidence first. Probability breaks ties only
+    // after comparable-rating count, so a tiny perfect sample cannot outrank
+    // a similarly strong result supported by thousands of ratings.
+    .sort((a, b) => b.observations - a.observations || b.probability - a.probability)
     .slice(0, limit);
 }
 
