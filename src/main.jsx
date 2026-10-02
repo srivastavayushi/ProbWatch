@@ -46,6 +46,28 @@ function EvidenceModal({ movie, onClose }) {
   </aside></div>;
 }
 
+function LoadingScreen({ error }) {
+  return <main className="loading-screen">
+    <div className="loading-card">
+      <div className="loading-brand"><span className="orb">P</span><span>ProbWatch</span></div>
+      {error ? <>
+        <p className="eyebrow">A SMALL DETOUR</p>
+        <h1>We couldn’t reach the movie evidence.</h1>
+        <p className="loading-copy">The local dataset did not load. Refresh the page to try again.</p>
+        <button className="primary" onClick={() => window.location.reload()}>Try again</button>
+      </> : <>
+        <p className="eyebrow">PREPARING YOUR EVIDENCE DESK</p>
+        <h1>Loading the stories<br /><em>behind the numbers.</em></h1>
+        <p className="loading-copy">We’re indexing one million real movie ratings and enriching the catalog with directors, cast, and plot details.</p>
+        <div className="loading-progress" aria-label="Loading MovieLens data"><span /></div>
+        <div className="loading-steps"><span>Ratings</span><span>Movie details</span><span>Probability engine</span></div>
+        <p className="loading-note">No account. No tracking. Just transparent evidence.</p>
+      </>}
+    </div>
+    <div className="loading-orbit orbit-one" /><div className="loading-orbit orbit-two" />
+  </main>;
+}
+
 function App() {
   const [data, setData] = useState(null);
   const [loadError, setLoadError] = useState('');
@@ -86,8 +108,8 @@ function App() {
   const updateRating = (id, rating) => setSelections(current => current.map(item => item.id === id ? { ...item, rating } : item));
   const removeMovie = id => setSelections(current => current.filter(item => item.id !== id));
 
-  if (loadError) return <main className="loading"><div className="orb">P</div><h1>ProbWatch</h1><p>We couldn’t load the local MovieLens data. Refresh the page to try again.</p></main>;
-  if (!data) return <main className="loading"><div className="orb">P</div><h1>ProbWatch</h1><p>Loading one million ratings and richer movie details…</p></main>;
+  if (loadError) return <LoadingScreen error />;
+  if (!data) return <LoadingScreen />;
   const starterMovies = STARTER_MOVIE_IDS.map(id => data.movies.get(id)).filter(Boolean);
   const likedCount = selections.filter(selection => selection.rating >= LIKE_THRESHOLD).length;
 
