@@ -1,0 +1,41 @@
+# ProbWatch
+
+ProbWatch is a transparent movie recommender built to demonstrate empirical probability, conditional probability, sampling uncertainty, and prediction evaluation. It deliberately does **not** use embeddings, neural networks, collaborative-filtering packages, or opaque models.
+
+## Run
+
+```bash
+npm install
+npm run dev
+```
+
+For a production check: `npm run build` then `npm run preview`.
+
+## Data
+
+The app includes the [MovieLens 100K](https://grouplens.org/datasets/movielens/100k/) dataset from GroupLens: 100,000 ratings from 1,000 users for 1,682 movies, released in 1998. It is a stable public benchmark. See the included `public/data` files and the dataset `README` for the original terms. GroupLens asks users not to state or imply endorsement and requires acknowledgement when reporting results based on the data. This educational demo uses the data locally in the browser; it does not send ratings anywhere.
+
+## Model
+
+The user supplies ratings. A rating ≥4 is treated as a “like.” For candidate movie `M` and one liked seed movie `S`:
+
+```
+P(like M | liked S) = count(users who liked S and liked M)
+                      / count(users who liked S and rated M)
+```
+
+For multiple liked seed films, ProbWatch pools the numerator and denominator across seeds. This is an easy-to-audit evidence aggregation rule, not an independence assumption or a causal model. Candidate movies require at least 12 comparable ratings. The displayed 95% range is a Wilson confidence interval for the pooled proportion.
+
+Uncertainty falls roughly as `1 / sqrt(n)`, so more comparable ratings make the interval narrower. This is visualized in the learning section.
+
+## Evaluation
+
+“Reality check” takes deterministic eligible MovieLens users, uses their earlier liked ratings as observations, hides each user’s two latest ratings, and predicts those ratings. The test user is excluded from all evidence counts, avoiding direct target leakage. It reports the number of held-out predictions, threshold accuracy (prediction ≥50% vs. actual like/not-like), Brier score, and probability-band calibration-style comparisons.
+
+## Limitations
+
+MovieLens 100K is old and not representative of everyone today. Historical ratings have selection bias and correlated users; seed evidence can overlap; rating ≥4 is a coarse definition of enjoyment. Results describe association in this dataset, not a causal or personalised guarantee.
+
+## Architecture
+
+`src/main.jsx` contains the client-only parser, deterministic probability engine, Wilson interval, hold-out evaluator, and UI. `public/data/ratings.tsv` and `public/data/movies.pipe` are the original MovieLens data files copied from the official release. No server, accounts, tracking, or model API is involved.
