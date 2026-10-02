@@ -13,7 +13,7 @@ For a production check: `npm run build` then `npm run preview`.
 
 ## Data
 
-The app includes the [MovieLens 100K](https://grouplens.org/datasets/movielens/100k/) dataset from GroupLens: 100,000 ratings from 1,000 users for 1,682 movies, released in 1998. It is a stable public benchmark. See the included `public/data` files and the dataset `README` for the original terms. GroupLens asks users not to state or imply endorsement and requires acknowledgement when reporting results based on the data. This educational demo uses the data locally in the browser; it does not send ratings anywhere.
+The app includes the [MovieLens 1M](https://grouplens.org/datasets/movielens/1m/) dataset from GroupLens: 1,000,209 ratings from 6,040 users for 3,883 movies, released in 2003. It is a stable public benchmark. See the included `public/data` files and the dataset `README` for the original terms. GroupLens asks users not to state or imply endorsement and requires acknowledgement when reporting results based on the data. This educational demo uses the data locally in the browser; it does not send ratings anywhere.
 
 ## Model
 
@@ -34,10 +34,10 @@ Uncertainty falls roughly as `1 / sqrt(n)`, so more comparable ratings make the 
 
 ## Limitations
 
-MovieLens 100K is old and not representative of everyone today. Historical ratings have selection bias and correlated users; seed evidence can overlap; rating ≥4 is a coarse definition of enjoyment. Results describe association in this dataset, not a causal or personalised guarantee.
+MovieLens 1M is old and not representative of everyone today. Historical ratings have selection bias and correlated users; seed evidence can overlap; rating ≥4 is a coarse definition of enjoyment. Results describe association in this dataset, not a causal or personalised guarantee.
 
 ## Architecture
 
-The UI lives in `src/main.jsx`. The deterministic data parser is in `src/lib/dataset.js`; the probability engine, Wilson interval, and hold-out evaluator are in `src/lib/probability.js`. `public/data/ratings.tsv` and `public/data/movies.pipe` are the original MovieLens data files copied from the official release. No server, accounts, tracking, or model API is involved.
+The UI lives in `src/main.jsx`. The deterministic data parser is in `src/lib/dataset.js`; the probability engine, Wilson interval, and hold-out evaluator are in `src/lib/probability.js`. `public/data/ratings.dat` and `public/data/movies.dat` are the original MovieLens 1M data files copied from the official release. No server, accounts, tracking, or model API is involved.
 
 Run `npm test` to execute the probability-engine unit tests, and `npm run build` to verify the production bundle.
