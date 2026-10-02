@@ -41,3 +41,14 @@ MovieLens 1M is old and not representative of everyone today. Historical ratings
 The UI lives in `src/main.jsx`. The deterministic data parser is in `src/lib/dataset.js`; the probability engine, Wilson interval, and hold-out evaluator are in `src/lib/probability.js`. `public/data/ratings.dat` and `public/data/movies.dat` are the original MovieLens 1M data files copied from the official release. No server, accounts, tracking, or model API is involved.
 
 Run `npm test` to execute the probability-engine unit tests, and `npm run build` to verify the production bundle.
+
+## 32M backend (Render)
+
+The GitHub Pages frontend currently uses the local 1M dataset. The `backend/` service is the production path for MovieLens 32M: FastAPI receives movie-search and recommendation requests, while PostgreSQL stores and indexes the dataset. The recommendation SQL implements the same pooled empirical conditional probability used by the frontend; no opaque model is added.
+
+1. Push this repository to GitHub and create a new Render Blueprint from `render.yaml`.
+2. Choose a PostgreSQL plan with enough disk for 32M ratings and its two indexes (at least 10 GB is a practical starting point).
+3. In the Render web service Shell, run `python scripts/import_movielens_32m.py`. It downloads the official 32M archive and imports the `movies.csv` and `ratings.csv` data into PostgreSQL.
+4. Verify `https://YOUR-RENDER-SERVICE.onrender.com/health`, then set `VITE_API_BASE_URL` to that URL when switching the frontend from its local dataset to the API.
+
+The API provides `GET /movies?q=...`, `POST /recommendations`, and `GET /health`. Keep the API URL in an environment setting, never hard-code credentials or `DATABASE_URL` in frontend code.
