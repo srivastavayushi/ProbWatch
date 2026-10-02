@@ -61,7 +61,7 @@ function evaluate(data) {
 
 function App() {
   const [data,setData]=useState(null), [selections,setSelections]=useState([]), [query,setQuery]=useState(''), [active,setActive]=useState(null), [tab,setTab]=useState('recommend'), [evalResult,setEvalResult]=useState(null);
-  useEffect(()=>{Promise.all([fetch('/data/ratings.tsv').then(r=>r.text()),fetch('/data/movies.pipe').then(r=>r.text())]).then(([r,m])=>setData(parseData(r,m)));},[]);
+  useEffect(()=>{Promise.all([fetch(`${import.meta.env.BASE_URL}data/ratings.tsv`).then(r=>r.text()),fetch(`${import.meta.env.BASE_URL}data/movies.pipe`).then(r=>r.text())]).then(([r,m])=>setData(parseData(r,m)));},[]);
   const suggestions=useMemo(()=> data ? [...data.movies.values()].filter(m=>m.title.toLowerCase().includes(query.toLowerCase())).slice(0, query?8:12) : [],[data,query]);
   const recs=useMemo(()=>data?recommend(data,selections):[],[data,selections]);
   const addMovie=m=>{if(!selections.some(x=>x.id===m.id)) setSelections(s=>[...s,{id:m.id,rating:5}]); setQuery('');};
