@@ -73,10 +73,11 @@ export function scoreMovies(data, selections, options = {}) {
   return scores;
 }
 
-export function getRecommendations(data, selections, options) {
-  return scoreMovies(data, selections, options)
+export function getRecommendations(data, selections, options = {}) {
+  const { limit = RECOMMENDATION_LIMIT, ...scoringOptions } = options;
+  return scoreMovies(data, selections, scoringOptions)
     .sort((a, b) => b.probability - a.probability || b.observations - a.observations)
-    .slice(0, RECOMMENDATION_LIMIT);
+    .slice(0, limit);
 }
 
 export function evaluatePredictions(data) {

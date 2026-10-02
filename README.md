@@ -15,6 +15,8 @@ For a production check: `npm run build` then `npm run preview`.
 
 The app includes the [MovieLens 1M](https://grouplens.org/datasets/movielens/1m/) dataset from GroupLens: 1,000,209 ratings from 6,040 users for 3,883 movies, released in 2003. It is a stable public benchmark. See the included `public/data` files and the dataset `README` for the original terms. GroupLens asks users not to state or imply endorsement and requires acknowledgement when reporting results based on the data. This educational demo uses the data locally in the browser; it does not send ratings anywhere.
 
+`public/data/enriched-movies.json` is a compact, generated subset of the hosted [MovieLens 32M enriched movies dataset](https://huggingface.co/datasets/krishnakamath/movielens-32m-movies-enriched). It matches 3,850 current MovieLens 1M movie IDs and supplies display-only genres, plot summaries, directors, and cast. Rating evidence and all probability calculations still use MovieLens 1M only.
+
 ## Model
 
 The user supplies ratings. A rating ≥4 is treated as a “like.” For candidate movie `M` and one liked seed movie `S`:
@@ -38,7 +40,7 @@ MovieLens 1M is old and not representative of everyone today. Historical ratings
 
 ## Architecture
 
-The UI lives in `src/main.jsx`. The deterministic data parser is in `src/lib/dataset.js`; the probability engine, Wilson interval, and hold-out evaluator are in `src/lib/probability.js`. `public/data/ratings.dat` and `public/data/movies.dat` are the original MovieLens 1M data files copied from the official release. No server, accounts, tracking, or model API is involved.
+The UI lives in `src/main.jsx`. It includes a guided quick-start, genre/release-decade filtering, evidence-strength labels, and the explanation view. The deterministic data parser is in `src/lib/dataset.js`; the probability engine, Wilson interval, and hold-out evaluator are in `src/lib/probability.js`. `public/data/ratings.dat` and `public/data/movies.dat` are the original MovieLens 1M data files copied from the official release. No server, accounts, tracking, or model API is involved.
 
 Run `npm test` to execute the probability-engine unit tests, and `npm run build` to verify the production bundle.
 
