@@ -38,4 +38,6 @@ MovieLens 100K is old and not representative of everyone today. Historical ratin
 
 ## Architecture
 
-`src/main.jsx` contains the client-only parser, deterministic probability engine, Wilson interval, hold-out evaluator, and UI. `public/data/ratings.tsv` and `public/data/movies.pipe` are the original MovieLens data files copied from the official release. No server, accounts, tracking, or model API is involved.
+The UI lives in `src/main.jsx`. The deterministic data parser is in `src/lib/dataset.js`; the probability engine, Wilson interval, and hold-out evaluator are in `src/lib/probability.js`. `public/data/ratings.tsv` and `public/data/movies.pipe` are the original MovieLens data files copied from the official release. No server, accounts, tracking, or model API is involved.
+
+Run `npm test` to execute the probability-engine unit tests, and `npm run build` to verify the production bundle.
